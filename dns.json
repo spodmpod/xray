@@ -1,0 +1,15 @@
+{
+  "dns": {
+    "servers": [
+      "8.8.8.8"
+    ],
+    "tag": "dns",
+    "queryStrategy": "UseIP",
+    "hosts": {
+      "cacerts.digicert.com": "104.21.21.147",
+      "ota.googlezip.net": "127.0.0.1"
+    },
+    "address": "localhost",
+    "skipFallback": true
+  }
+}

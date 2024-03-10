@@ -1,0 +1,49 @@
+{
+  "routing": {
+    "domainStrategy": "AsIs", // IPIfNonMatch
+    "domainMatcher": "mph",
+    "rules": [
+      {
+        "type": "field",
+        "port": 53,
+        "inboundTag": [
+          "proxy-in"
+        ],
+        "outboundTag": "dns-out"
+      },
+      {
+        "type": "field",
+        "outboundTag": "block",
+        "domain": [
+          "geosite:category-ads-all"
+        ]
+      },
+      {
+        "network": "tcp,udp",
+        //"outboundTag": "proxy",
+        "balancerTag": "url-test",
+        "type": "field"
+      }
+    ],
+    "balancers": [
+      {
+        "tag": "url-test",
+        "selector": [
+          "proxy",
+          "proxy1"
+        ],
+        "strategy": {
+          "type": "leastPing"
+        }
+      }
+    ]
+  },
+  "observatory": {
+    "subjectSelector": [
+      "proxy",
+      "proxy1"
+    ],
+    "probeURL": "https://www.google.com/generate_204",
+    "probeInterval": "1m"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "outbounds": [
+    {
+      "mux": {
+        "enabled": true
+      },
+      "protocol": "shadowsocks",
+      "settings": {
+        "servers": [
+          {
+            "address": "104.16.66.85",
+            "level": 8,
+            "method": "2022-blake3-aes-128-gcm",
+            "password": "KqXquXaK0GYCxQ2mX7jLig==:T1XDRfOcankVkuExiVAuBA==",
+            "port": 443,
+            "uot": true
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "tlsSettings": {
+          "allowInsecure": true,
+          "serverName": "udemy.com"
+        },
+        "wsSettings": {
+          "headers": {
+            "Host": "do2.kitu.xyz"
+          },
+          "path": "wss://udemy.com/ssws/"
+        }
+      },
+      "tag": "proxy"
+    }
+  ],
+      "experimental": {
+          "clash_api": {
+          "external_controller": "127.0.0.1:9091",
+          "external_ui": "/data/adb/xray/confs/dashboard/",
+          "store_selected": true
+      }
+    }
+  }
+}

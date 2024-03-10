@@ -1,0 +1,49 @@
+{
+  "outbounds": [
+    {
+      "protocol": "vless",
+      "tag": "proxy",
+      "mux": {
+        "concurrency": 8,
+        "packetEncoding": "[xudp]",
+        "enabled": true
+      },
+      "settings": {
+        "vnext": [
+          {
+            "address": "104.16.65.85",
+            "port": 443,
+            "users": [
+              {
+                "alterId": 0,
+                "encryption": "none",
+                "flow": "",
+                "id": "a3feebf4-4b06-45dc-a174-bc69e300f4e6",
+                "level": 8,
+                "security": "auto"
+              }
+            ]
+          }
+        ],
+        "packetEncoding": "[xudp]"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "tlsSettings": {
+          "allowInsecure": true,
+          "serverName": "udemy.com"
+        },
+        "wsSettings": {
+          "path": "wss://udemy.com/xvless/",
+          "headers": {
+            "Host": "do1.kitu.xyz"
+          }
+        }
+      },
+      "sockopt": {
+        "domainStrategy": "UseIP"
+      }
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "log": {
+    "access": "none",
+    "loglevel": "error",
+    "dnsLog": true
+  },
+  "dns": {
+    "servers": [
+      "8.8.8.8"
+    ],
+    "tag": "dns",
+    "queryStrategy": "ip",
+    "hosts": {
+      "cacerts.digicert.com": "104.21.21.147",
+      "ota.googlezip.net": "127.0.0.1"
+    },
+    "address": "localhost",
+    "skipFallback": true
+  },
+  "inbounds": [
+    {
+      "tag": "proxy-in",
+      "port": 65535,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "network": "tcp,udp",
+        "followRedirect": true
+      },
+      "streamSettings": {
+        "sockopt": {
+          "tproxy": "tproxy"
+        }
+      },
+      "sniffing": {
+        "enabled": true,
+        "routeOnly": true,
+        "destOverride": [
+          "http",
+          "tls"
+        ]
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "mux": {
+        "enabled": false
+      },
+      "protocol": "trojan",
+      "domainStrategy": "UseIPv4",
+      "settings": {
+        "servers": [
+          {
+            "address": "104.18.3.2",
+            "level": 8,
+            "password": "7ab6ea70-7b03-11ed-b639-225401db9d57",
+            "port": 443,
+            "uot": true
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "tlsSettings": {
+          "allowInsecure": true,
+          "serverName": "sg-ovh.tjvpn.org"
+        },
+        "wsSettings": {
+          "headers": {
+            "Host": "sg-ovh.tjvpn.org"
+          },
+          "path": "/fastssh"
+        }
+      },
+      "tag": "proxy"
+    },
+    {
+      "tag": "direct",
+      "protocol": "freedom",
+      "settings": {
+        "domainStrategy": "UseIPv4" // AsIs/UseIP/UseIPv[4/6]/PreferIPv[4/6]
+      }
+    },
+    {
+      "tag": "block",
+      "protocol": "blackhole",
+      "settings": {
+        "response": {
+          "type": "http"
+        }
+      }
+    },
+    {
+      "tag": "dns-out",
+      "protocol": "dns",
+      "settings": {
+        "address": "8.8.8.8"
+      }
+    }
+  ],
+  "routing": {
+    "domainStrategy": "ip", // IPIfNonMatch
+    "domainMatcher": "mph",
+    "rules": [
+      {
+        "type": "field",
+        "port": 53,
+        "inboundTag": [
+          "proxy-in"
+        ],
+        "outboundTag": "dns-out"
+      },
+      {
+        "type": "field",
+        "outboundTag": "block",
+        "domain": [
+          "geosite:category-ads-all"
+        ]
+      },
+      {
+        "network": "tcp,udp",
+        "outboundTag": "proxy",
+        "type": "field"
+      }
+    ]
+  }
+}
